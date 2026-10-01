@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>Тест для тебя ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ЭКРАН ТЕСТА -->
+    <div id="quizSection">
+        <a href="index.html" class="back-btn">← На главную</a>
+        <h1>Тест на сколько хорошо ты знаешь наши отношения за эти 8 месяцев 💕</h1>
+        <p class="subhead">Отвечай честно, любимая ✨</p>
+
+        <div class="progress-text" id="progressText">Вопрос 1 из 6</div>
+        <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+        <div id="questionContainer"></div>
+    </div>
+
+    <!-- ЭКРАН РЕЗУЛЬТАТА -->
+    <div id="resultsSection" class="hidden">
+        <h1>Результаты теста 💖</h1>
+        <p class="subhead">Вот как ты знаешь нашу историю</p>
+
+        <div class="result-area">
+            <div class="label">Правильных ответов</div>
+            <div class="score" id="scoreDisplay">0/6</div>
+            <div class="comment" id="resultComment"></div>
+        </div>
+
+        <h2 style="font-size:1.3rem; margin-top:10px;">Разбор ответов</h2>
+        <div id="reviewContainer"></div>
+
+        <a href="index.html" class="btn-primary" id="toHomeBtn" style="display:block; text-decoration:none;">
+            Вернуться на главную →
+        </a>
+    </div>
+
+</div>
+
+<div id="heartsRain" class="hearts-rain"></div>
+
+<script>
+(function () {
+    const STORAGE_KEY = 'quizResult';
+
+    /* НАСТРОЙКА: correct — 0=A, 1=B, 2=C, 3=D */
+    const questions = [
+        {
+            question: "Как мы с тобой познакомились?",
+            options: [
+                "Ты мне написала с целью познакомиться",
+                "Мы познакомились в школе",
+                "Я тебе написал с целью познакомиться",
+                "Ты вышла вместе с Лизой когда Саня приезжал к ней после сдачи теоретического экзамена, и мы встретились"
+            ],
+            correct: 2
+        },
+        {
+            question: "Как прошла наша первая встреча?",
+            options: [
+                "Мы сразу поехали в Степногорск на Кобальте",
+                "Мы поехали возить доставки на Кобальте",
+                "Я приехал к тебе в Кокш чтобы погулять",
+                "Я приехал в институт, и мы сидели на лавочке"
+            ],
+            correct: 1
+        },
+        {
+            question: "Место первой нашей встречи?",
+            options: [
+                "Институтская площадь",
+                "Кокшетау, у тебя под домом",
+                "Школа",
+                "В городе"
+            ],
+            correct: 0
+        },
+        {
+            question: "Как прошла наша вторая встреча?",
+            options: [
+                "Мы гуляли в институте и сидели на лавочках",
+                "Ты пришла пьяная, нас отвезли в город и мы там гуляли",
+                "Ты отказалась на вторую встречу",
+                "Просто гуляли по городу"
+            ],
+            correct: 1
+        },
+        {
+            question: "Что я тебе подарил при первой встрече?",
+            options: [
+                "Букет роз",
+                "Шоколадку",
+                "Одну розу и шоколадку",
+                "Букет роз и огромную шоколадку"
+            ],
+            correct: 2
+        },
+        {
+            question: "Когда же мы начали встречаться?",
+            options: [
+                "04.05.26",
+                "05.05.26",
+                "04.04.26",
+                "03.04.26"
+            ],
+            correct: 2
+        }
+    ];
+
+    let currentQ = 0;
+    let userAnswers = new Array(questions.length).fill(null);
+
+    const quizSection = document.getElementById('quizSection');
+    const resultsSection = document.getElementById('resultsSection');
+    const questionContainer = document.getElementById('questionContainer');
+    const progressText = document.getElementById('progressText');
+    const progressBar = document.getElementById('progressBar');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const resultComment = document.getElementById('resultComment');
+    const reviewContainer = document.getElementById('reviewContainer');
+
+    function renderQuestion() {
+        const q = questions[currentQ];
+        progressText.textContent = 'Вопрос ' + (currentQ + 1) + ' из ' + questions.length;
+        progressBar.style.width = ((currentQ) / questions.length * 100) + '%';
+
+        let html = '<div class="question-block">' +
+            '<div class="question-text">' + (currentQ + 1) + '. ' + q.question + '</div>' +
+            '<div class="options">';
+        q.options.forEach(function (opt, i) {
+            const selectedClass = userAnswers[currentQ] === i ? 'selected' : '';
+            html += '<button class="option-btn ' + selectedClass + '" data-idx="' + i + '">' + opt + '</button>';
+        });
+        html += '</div></div>';
+
+        html += '<div class="nav-row">';
+        if (currentQ > 0) {
+            html += '<button class="btn-secondary" id="prevBtn">← Назад</button>';
+        }
+        const isLast = currentQ === questions.length - 1;
+        const canProceed = userAnswers[currentQ] !== null;
+        html += '<button class="btn-primary" id="nextBtn" style="margin-top:0;" ' + (canProceed ? '' : 'disabled') + '>' +
+                    (isLast ? 'Завершить тест' : 'Далее →') +
+                '</button>';
+        html += '</div>';
+
+        questionContainer.innerHTML = html;
+
+        questionContainer.querySelectorAll('.option-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                userAnswers[currentQ] = parseInt(this.dataset.idx);
+                renderQuestion();
+            });
+        });
+        const prevBtn = document.getElementById('prevBtn');
+        if (prevBtn) prevBtn.addEventListener('click', function () { currentQ--; renderQuestion(); });
+
+        const nextBtn = document.getElementById('nextBtn');
+        nextBtn.addEventListener('click', function () {
+            if (userAnswers[currentQ] === null) return;
+            if (currentQ < questions.length - 1) {
+                currentQ++;
+                renderQuestion();
+            } else {
+                finishQuiz();
+            }
+        });
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function finishQuiz() {
+        progressBar.style.width = '100%';
+
+        let score = 0;
+        questions.forEach(function (q, i) {
+            if (userAnswers[i] === q.correct) score++;
+        });
+
+        /* Сохраняем результат в localStorage — index.html его прочитает */
+        localStorage.setItem(STORAGE_KEY, score);
+
+        scoreDisplay.textContent = score + '/' + questions.length;
+
+        let comment = '';
+        const pct = score / questions.length;
+        if (pct === 1) comment = 'Идеально! Ты знаешь нашу историю лучше всех 💖';
+        else if (pct >= 0.66) comment = 'Отличный результат! Ты помнишь наши главные моменты ✨';
+        else if (pct >= 0.33) comment = 'Хорошо! Но есть что вспомнить вместе 😊';
+        else comment = 'Ну ничего, повод пересмотреть нашу историю вместе 💕';
+        resultComment.textContent = comment;
+
+        let reviewHtml = '';
+        questions.forEach(function (q, i) {
+            const userAns = userAnswers[i];
+            const isCorrect = userAns === q.correct;
+            reviewHtml += '<div class="review-item">' +
+                '<div class="review-q">' + (i + 1) + '. ' + q.question + '</div>';
+            q.options.forEach(function (opt, j) {
+                let cls = 'review-opt';
+                let mark = '';
+                if (j === q.correct) { cls += ' correct'; mark = '✓'; }
+                if (j === userAns && !isCorrect) { cls += ' wrong'; mark = '✗'; }
+                else if (j === userAns && isCorrect) { mark = '✓'; }
+                reviewHtml += '<div class="' + cls + '">' +
+                    '<span class="mark">' + mark + '</span>' +
+                    String.fromCharCode(65 + j) + '. ' + opt +
+                '</div>';
+            });
+            reviewHtml += '</div>';
+        });
+        reviewContainer.innerHTML = reviewHtml;
+
+        quizSection.classList.add('hidden');
+        resultsSection.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        if (pct >= 0.66) startHeartsRain(4000);
+    }
+
+    function startHeartsRain(duration) {
+        const container = document.getElementById('heartsRain');
+        container.innerHTML = '';
+        const emojis = ['❤️', '💕', '💖', '💗', '💘', '💝', '✨'];
+        for (let i = 0; i < 30; i++) {
+            const span = document.createElement('span');
+            span.className = 'heart-emoji';
+            span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            span.style.left = Math.random() * 100 + '%';
+            span.style.fontSize = (1.2 + Math.random() * 2) + 'rem';
+            span.style.animationDuration = (4 + Math.random() * 5) + 's';
+            span.style.animationDelay = (Math.random() * 3) + 's';
+            container.appendChild(span);
+        }
+        if (duration) {
+            setTimeout(function () { container.innerHTML = ''; }, duration);
+        }
+    }
+
+    renderQuestion();
+})();
+</script>
+
+</body>
+</html>

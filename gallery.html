@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>Галерея 🖼️</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">← Назад</a>
+    <h2>Галерея 🖼️</h2>
+    <p class="subhead">Наши лучшие кадры</p>
+
+    <div class="gallery-grid" id="galleryGrid"></div>
+</div>
+
+<div class="lightbox" id="lightbox"><img id="lightboxImg" src="" alt=""></div>
+
+<script>
+(function () {
+    /* ============================================================
+       ГАЛЕРЕЯ — список фотографий.
+       Чтобы добавить ещё — просто допиши новую строку в массив.
+       ============================================================ */
+    const galleryData = [
+        "img/1.jpg",
+        "img/2.jpg",
+        "img/3.jpg",
+        "img/4.jpg",
+        "img/5.jpg",
+        "img/6.jpg",
+        "img/7.jpg",
+        "img/8.jpg",
+        "img/9.jpg",
+        "img/10.jpg",
+        "img/11.jpg",
+        "img/12.jpg",
+        "img/13.jpg",
+        "img/14.jpg",
+        "img/16.jpg",
+        "img/15.jpg",
+        "img/вася.jpg",
+        "img/готовит.jpg",
+        "img/жопка.jpg",
+        "img/кинотеатр.jpg",
+        "img/красотка.jpg",
+        "img/мы и чуня.jpg",
+        "img/мы и чуня2.jpg",
+        "img/наша первая фотка.jpg",
+        "img/отдыхнаозере.jpg",
+        "img/покатушкинавеликах.jpg",
+        "img/тыишаурма.jpg",
+        "img/целуемся.jpg",
+        "img/это ты в мешке.jpg",
+        "img/это я на тебе лежу.jpg"
+    ];
+
+    const grid = document.getElementById('galleryGrid');
+    grid.innerHTML = galleryData.map(function (src) {
+        return '<img src="' + src + '" alt="" loading="lazy">';
+    }).join('');
+
+    /* Лайтбокс — тап по фото открывает на весь экран */
+    grid.querySelectorAll('img').forEach(function (img) {
+        img.addEventListener('click', function () {
+            document.getElementById('lightboxImg').src = img.src;
+            document.getElementById('lightbox').classList.add('active');
+        });
+    });
+
+    document.getElementById('lightbox').addEventListener('click', function () {
+        this.classList.remove('active');
+    });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>Для тебя ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Привет, любимая 💕</h1>
+    <p class="subhead">У меня для тебя кое-что есть</p>
+
+    <!-- Меняется: либо кнопка, либо результат теста -->
+    <div id="dynamicBlock"></div>
+
+    <!-- Меню с разделами (появляется только после теста) -->
+    <div id="menuBlock" class="hidden">
+        <h2 style="font-size:1.3rem; margin-top:24px; margin-bottom:14px;">Что хочешь открыть?</h2>
+        <div class="menu-grid">
+            <a href="gallery.html" class="menu-card">
+                <div class="icon">🖼️</div>
+                <div class="title">Галерея</div>
+            </a>
+            <a href="places.html" class="menu-card">
+                <div class="icon">📍</div>
+                <div class="title">Наши места</div>
+            </a>
+            <a href="moments.html" class="menu-card">
+                <div class="icon">✨</div>
+                <div class="title">Великолепные моменты</div>
+            </a>
+            <a href="letter.html" class="menu-card">
+                <div class="icon">💌</div>
+                <div class="title">Послание от меня для тебя</div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="heartsRain" class="hearts-rain"></div>
+
+<script>
+(function () {
+    const STORAGE_KEY = 'quizResult';
+    const totalQuestions = 6;
+
+    const dynamicBlock = document.getElementById('dynamicBlock');
+    const menuBlock = document.getElementById('menuBlock');
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (saved === null) {
+        dynamicBlock.innerHTML =
+            '<div class="start-block">' +
+                '<span class="start-emoji">💝</span>' +
+                '<p class="start-hint">Сначала пройди небольшой тест — проверь, насколько хорошо ты помнишь нашу историю за 6 месяцев</p>' +
+                '<a href="test.html" class="btn-primary" style="display:block; text-decoration:none;">Пройти тест →</a>' +
+            '</div>';
+        menuBlock.classList.add('hidden');
+    } else {
+        const score = parseInt(saved, 10);
+
+        let comment = '';
+        const pct = score / totalQuestions;
+        if (pct === 1) comment = 'Идеально! Ты знаешь нашу историю лучше всех 💖';
+        else if (pct >= 0.66) comment = 'Отличный результат! Ты помнишь наши главные моменты ✨';
+        else if (pct >= 0.33) comment = 'Хорошо! Но есть что вспомнить вместе 😊';
+        else comment = 'Ну ничего, повод пересмотреть нашу историю вместе 💕';
+
+        dynamicBlock.innerHTML =
+            '<div class="start-block home-result">' +
+                '<div class="label">Твой результат теста</div>' +
+                '<div class="score">' + score + '/' + totalQuestions + '</div>' +
+                '<div class="comment">' + comment + '</div>' +
+                '<button class="btn-reset" id="resetBtn">пройти заново</button>' +
+            '</div>';
+
+        menuBlock.classList.remove('hidden');
+
+        document.getElementById('resetBtn').addEventListener('click', function () {
+            localStorage.removeItem(STORAGE_KEY);
+            location.reload();
+        });
+
+        if (pct >= 0.66) startHeartsRain(4000);
+    }
+
+    function startHeartsRain(duration) {
+        const container = document.getElementById('heartsRain');
+        container.innerHTML = '';
+        const emojis = ['❤️', '💕', '💖', '💗', '💘', '💝', '✨'];
+        for (let i = 0; i < 30; i++) {
+            const span = document.createElement('span');
+            span.className = 'heart-emoji';
+            span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            span.style.left = Math.random() * 100 + '%';
+            span.style.fontSize = (1.2 + Math.random() * 2) + 'rem';
+            span.style.animationDuration = (4 + Math.random() * 5) + 's';
+            span.style.animationDelay = (Math.random() * 3) + 's';
+            container.appendChild(span);
+        }
+        if (duration) {
+            setTimeout(function () { container.innerHTML = ''; }, duration);
+        }
+    }
+})();
+</script>
+
+</body>
+</html>
