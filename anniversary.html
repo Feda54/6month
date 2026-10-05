@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>Наша годовщина 🎉</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">← Назад</a>
+
+    <!-- Заголовок с бейджем -->
+    <div class="anniv-hero">
+        <span class="new-badge new-badge--big">Новое</span>
+        <h1>Как прошёл день нашей годовщины</h1>
+        <p class="subhead">Этот день я запомню навсегда 💜</p>
+        <div class="anniv-date">06 · 10 · 2026</div>
+    </div>
+
+    <!-- Timeline дня -->
+    <div class="timeline">
+
+        <!-- УТРО -->
+        <div class="timeline-item">
+            <div class="tl-time">Утро</div>
+            <div class="tl-photo-wrap">
+                <img class="tl-photo" src="img/годовщина-утро.jpg" alt="" loading="lazy">
+            </div>
+            <div class="tl-title">Начало дня</div>
+            <div class="tl-desc">
+                Проснулся с мыслью о тебе — и весь день был уже окрашен в твои любимые цвета.
+                Собрался, приехал, увидел тебя — и понял: это будет лучший день.
+            </div>
+        </div>
+
+        <!-- ДЕНЬ -->
+        <div class="timeline-item">
+            <div class="tl-time">День</div>
+            <div class="tl-photo-wrap">
+                <img class="tl-photo" src="img/годовщина-день.jpg" alt="" loading="lazy">
+            </div>
+            <div class="tl-title">Гуляли вместе</div>
+            <div class="tl-desc">
+                Просто были рядом, держались за руки и говорили обо всём. Такие моменты —
+                самые ценные. Никаких планов, только мы.
+            </div>
+        </div>
+
+        <!-- ВЕЧЕР -->
+        <div class="timeline-item">
+            <div class="tl-time">Вечер</div>
+            <div class="tl-photo-wrap">
+                <img class="tl-photo" src="img/годовщина-вечер.jpg" alt="" loading="lazy">
+            </div>
+            <div class="tl-title">Ужин и разговоры</div>
+            <div class="tl-desc">
+                Сидели, смеялись, вспоминали, как всё начиналось. Вспомнили первый поцелуй,
+                первое «люблю», всё-всё. Столько всего было — и всё это только наше.
+            </div>
+        </div>
+
+        <!-- НОЧЬ -->
+        <div class="timeline-item">
+            <div class="tl-time">Ночь</div>
+            <div class="tl-photo-wrap">
+                <img class="tl-photo" src="img/годовщина-ночь.jpg" alt="" loading="lazy">
+            </div>
+            <div class="tl-title">И самое главное</div>
+            <div class="tl-desc">
+                Держал тебя за руку и думал о том, как сильно я тебя люблю. Ты — моё
+                лучшее решение в жизни. Год вместе — и это только начало.
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Финальная подпись -->
+    <div class="anniv-outro">
+        <div class="anniv-heart">💜</div>
+        <div class="anniv-outro-text">Я тебя люблю</div>
+        <div class="anniv-outro-sub">и так будет всегда</div>
+    </div>
+</div>
+
+<script>
+(function () {
+    /* Плавное появление timeline-карточек при скролле */
+    const items = document.querySelectorAll('.timeline-item');
+    if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        items.forEach(function (item) { io.observe(item); });
+    } else {
+        items.forEach(function (item) { item.classList.add('visible'); });
+    }
+})();
+</script>
+
+</body>
+</html>
