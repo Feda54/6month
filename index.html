@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
 <title>Для тебя ❤️</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -18,8 +17,17 @@
 
     <!-- Меню с разделами (появляется только после теста) -->
     <div id="menuBlock" class="hidden">
-        <h2 style="font-size:1.3rem; margin-top:24px; margin-bottom:14px;">Что хочешь открыть?</h2>
+        <h2 style="font-size:1.5rem; margin-top:26px; margin-bottom:16px;">Что хочешь открыть?</h2>
         <div class="menu-grid">
+
+            <a href="anniversary.html" class="menu-card menu-card--new">
+                <div class="icon">🎉</div>
+                <div class="title">
+                    <span class="new-badge">Новое</span>
+                    Как прошёл день нашей годовщины
+                </div>
+            </a>
+
             <a href="gallery.html" class="menu-card">
                 <div class="icon">🖼️</div>
                 <div class="title">Галерея</div>
@@ -56,7 +64,7 @@
         dynamicBlock.innerHTML =
             '<div class="start-block">' +
                 '<span class="start-emoji">💝</span>' +
-                '<p class="start-hint">Сначала пройди небольшой тест — проверь, насколько хорошо ты помнишь нашу историю за 6 месяцев</p>' +
+                '<p class="start-hint">Сначала пройди небольшой тест — проверь, насколько хорошо ты помнишь нашу историю за 8 месяцев</p>' +
                 '<a href="test.html" class="btn-primary" style="display:block; text-decoration:none;">Пройти тест →</a>' +
             '</div>';
         menuBlock.classList.add('hidden');
